@@ -3,13 +3,13 @@ name: Trigger Portainer Webhook
 on:
   workflow_call:
     inputs:
-      portainer_webhook_url:
+      webhook_url:
         required: true
         type: string
     secrets:
-      portainer_cf_client_id:
+      cf_client_id:
         required: true
-      portainer_cf_client_secret:
+      cf_client_secret:
         required: true
 
 jobs:
@@ -18,12 +18,12 @@ jobs:
     steps:
     - name: Call Portainer Webhook
       run: |
-        echo "🔄 Wywołuję webhook: ${{ inputs.portainer_webhook_url }}"
+        echo "🔄 Wywołuję webhook: ${{ inputs.webhook_url }}"
     
         HTTP_STATUS=$(curl -s -o /tmp/output.html -w "%{http_code}" \
-          -X POST "${{ inputs.portainer_webhook_url }}" \
-          -H "CF-Access-Client-Id: ${{ secrets.portainer_cf_client_id }}" \
-          -H "CF-Access-Client-Secret: ${{ secrets.portainer_cf_client_secret }}" \
+          -X POST "${{ inputs.webhook_url }}" \
+          -H "CF-Access-Client-Id: ${{ secrets.cf_client_id }}" \
+          -H "CF-Access-Client-Secret: ${{ secrets.cf_client_secret }}" \
         )
     
         echo "📥 HTTP status: $HTTP_STATUS"
