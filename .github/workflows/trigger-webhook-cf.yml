@@ -1,4 +1,4 @@
-name: Trigger Portainer Webhook
+name: Trigger Webhook CF
 
 on:
   workflow_call:
