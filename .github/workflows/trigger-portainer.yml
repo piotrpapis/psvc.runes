@@ -16,21 +16,21 @@ jobs:
   trigger:
     runs-on: ubuntu-latest
     steps:
-      - name: Call Portainer Webhook
-        run: |
-          echo "🔄 Wywołuję webhook: ${{ inputs.portainer_webhook_url }}"
-
-          RESPONSE=$(curl -s -D - -o /tmp/output.html -w "%{http_code}" \
-            -X POST "${{ inputs.portainer_webhook_url }}" \
-            -H "CF-Access-Client-Id: ${{ secrets.portainer_cf_client_id }}" \
-            -H "CF-Access-Client-Secret: ${{ secrets.portainer_cf_client_secret }}" \
-          )
-
-          echo "📥 HTTP status: $RESPONSE"
-          echo "📥 Body:"
-          cat /tmp/output.html
-
-          if [[ "$RESPONSE" -lt 200 || "$RESPONSE" -ge 300 ]]; then
-            echo "❌ Webhook failed with HTTP status $RESPONSE"
-            exit 1
-          fi
+    - name: Call Portainer Webhook
+      run: |
+        echo "🔄 Wywołuję webhook: ${{ inputs.portainer_webhook_url }}"
+    
+        HTTP_STATUS=$(curl -s -o /tmp/output.html -w "%{http_code}" \
+          -X POST "${{ inputs.portainer_webhook_url }}" \
+          -H "CF-Access-Client-Id: ${{ secrets.portainer_cf_client_id }}" \
+          -H "CF-Access-Client-Secret: ${{ secrets.portainer_cf_client_secret }}" \
+        )
+    
+        echo "📥 HTTP status: $HTTP_STATUS"
+        echo "📥 Body:"
+        cat /tmp/output.html
+    
+        if [[ "$HTTP_STATUS" -lt 200 || "$HTTP_STATUS" -ge 300 ]]; then
+          echo "❌ Webhook failed with HTTP status $HTTP_STATUS"
+          exit 1
+        fi
