@@ -1,0 +1,29 @@
+name: Trigger Webhook
+
+on:
+  workflow_call:
+    inputs:
+      webhook_url:
+        required: true
+        type: string
+
+jobs:
+  trigger:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Call Webhook
+      run: |
+        echo "🔄 Wywołuję webhook: ${{ inputs.webhook_url }}"
+    
+        HTTP_STATUS=$(curl -s -o /tmp/output.html -w "%{http_code}" \
+          -X POST "${{ inputs.webhook_url }}" \
+        )
+    
+        echo "📥 HTTP status: $HTTP_STATUS"
+        echo "📥 Body:"
+        cat /tmp/output.html
+    
+        if [[ "$HTTP_STATUS" -lt 200 || "$HTTP_STATUS" -ge 300 ]]; then
+          echo "❌ Webhook failed with HTTP status $HTTP_STATUS"
+          exit 1
+        fi
