@@ -1,4 +1,4 @@
-name: Trigger Webhook CF
+name: Trigger Webhook with CF Access
 
 on:
   workflow_call:
@@ -16,7 +16,7 @@ jobs:
   trigger:
     runs-on: ubuntu-latest
     steps:
-    - name: Call Portainer Webhook
+    - name: Call Webhook
       run: |
         echo "🔄 Wywołuję webhook: ${{ inputs.webhook_url }}"
     
