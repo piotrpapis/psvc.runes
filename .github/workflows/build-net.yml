@@ -10,7 +10,7 @@ on:
         required: true
         type: string
       project_net_version:
-        required: true
+        required: false
         type: string
         default: '8.0.x'
 
